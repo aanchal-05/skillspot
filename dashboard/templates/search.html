@@ -1,0 +1,158 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+
+<head>
+<title>:: SkillSpot :: Dashboard</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<!-- VENDOR CSS -->
+<link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist/css/chartist.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css' %}">
+
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}">
+</head>
+<body class="theme-cyan">
+
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="m-t-30"><img src="{%static 'assets\images\logo1.jpg' %}" width="90" height="90" alt="logo"></div>
+        
+        <p>Please wait...</p>        
+    </div>
+</div>
+<!-- Overlay For Sidebars -->
+
+<div id="wrapper">
+
+   <nav class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="{% url 'login' %}"><img src="{%static 'assets\images\logo2.jpg' %}" alt=" Logo" class="img-responsive logo"></a>                
+            </div>
+            
+          <div class="navbar-right">
+                <form id="navbar-search" class="navbar-form search-form"  method="get" action="{%url 'search' %}">
+                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search here..." type="text">
+                    <button type="submit" class="btn btn-default"><i class="icon-magnifier"></i></button>
+                </form>
+             
+
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav">
+                
+                        <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block mt-3 px-2" style="font-size:16px"> 
+                              {% if user_name %}
+
+                            <p>Welcome, {{ user_name }}!</p>
+                                {% else %}
+                                        <p>Welcome, Guest!</p>
+                               {% endif %} 
+
+                        </li>
+                        
+                <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout"></i></a>
+                        </li>
+                  
+                  
+     
+
+                        </li>
+                        </ul>
+        </div>
+        </div>
+        </div>
+    </nav>
+    
+  
+     <div class="row clearfix" id ="search-table" >
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="header">
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-hover js-basic-example dataTable table-custom">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Designation</th>
+                                            <th>Location</th>
+                                            <th>Skills</th>
+                                            <th> Ratings </th>
+                                            
+            
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                      
+                                    </tfoot>
+                                    <tbody>
+                                       
+                                       {% for result_data in result_data_list %}
+                                       <tr> 
+        <td> <a href="{% url 'profile' email=result_data.email %}"  style = "text-decoration:none;"> {{ result_data.name }} {{result_data.last_name}} </a> </td>
+        <td> {{ result_data.designation }}</td>
+        <td>{{ result_data.location }}</td>
+
+        <td> {{ result_data.skills }}</td>
+        
+        <!-- Add more fields as needed -->
+        
+        </tr>
+    {% endfor %}
+                                      </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           
+
+
+<!-- Javascript -->
+
+<script src="{% static 'assets/bundles/datatablescripts.bundle.js' %}"></script>
+<script src="{% static 'assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js' %}"></script>
+<script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.html5.min.js'%}"></script>
+<script src="{% static 'assets/vendor/jquery-datatable/buttons/buttons.print.min.js'%}"></script>
+
+<script src="{% static 'assets/vendor/sweetalert/sweetalert.min.js'%}"></script> <!-- SweetAlert Plugin Js --> 
+
+
+<script src="{% static 'assets/js/pages/tables/jquery-datatable.js'%}"></script>
+
+<script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+
+<script src="{% static 'assets/bundles/chartist.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/knob.bundle.js' %}"></script> 
+<script src="{% static 'assets/bundles/flotscripts.bundle.js' %}"></script> 
+<script src="{% static 'assets/vendor/flot-charts/jquery.flot.selection.js' %}"></script>
+
+<script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/js/index.js' %}"></script>
+</body>
+
+
+</html>

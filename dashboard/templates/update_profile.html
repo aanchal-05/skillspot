@@ -1,0 +1,181 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+
+<head>
+<title>:: SkillSpot :: Update Profile</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<!-- VENDOR CSS -->
+<link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist/css/chartist.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/toastr/toastr.min.css' %}">
+
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}">
+{% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">  {% endcomment %}
+
+</head>
+<body class="theme-cyan">
+
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="m-t-30"><img src="{%static 'assets\images\logo1.jpg' %}" width="90" height="90" alt="logo"></div>
+        <p>Please wait...</p>        
+    </div>
+</div>
+
+<div id="wrapper">
+    
+  <nav class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="{% url 'login' %}"><img src="{%static 'assets\images\logo2.jpg' %}" alt=" Logo" class="img-responsive logo"></a>                
+            </div>
+            
+          <div class="navbar-right">
+                <form id="navbar-search" class="navbar-form search-form"  method="get" action="{%url 'search' %}">
+                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search here..." type="text">
+                    <button type="submit" class="btn btn-default"><i class="icon-magnifier"></i></button>
+                </form>
+             
+
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav">
+                
+                        <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block mt-3 px-2" style="font-size:16px"> 
+                              {% if user_name %}
+
+                            <p>Welcome, {{ user_name }}!</p>
+                                {% else %}
+                                        <p>Welcome, Guest!</p>
+                               {% endif %} 
+
+                        </li>
+                        
+                <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout"></i></a>
+                        </li>
+                  
+                  
+     
+
+                        </li>
+                        </ul>
+        </div>
+        </div>
+        </div>
+    </nav>
+      
+  </div> 
+     
+
+          {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% elif message.tags == "error" %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+
+
+    <div class="card">
+                        <div class="body">
+                            <ul class="nav nav-tabs-new">
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Basic">Basic</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Account">Account</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#General">General</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content padding-0">
+
+                        <div class="tab-pane active" id="Basic">
+                            <div class="card">
+                                <div class="body">
+                                <form  action="/update_profile/" method="post">
+                                   {% csrf_token %}
+                                    {{ form.as_p }}
+
+                                    <h6>Basic Information</h6>
+                                    <div class="row clearfix">
+                                    
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                            <label for ="name"> First Name </label>                                                
+                                                <input type="text" class="form-control" value="{{ name }}" name="first-name" id="first-name"placeholder="First Name">
+                                            </div>
+                                            <div class="form-group">  
+                                              <label for ="last_name"> Last Name </label>                                                
+                                              
+                                                <input type="text" class="form-control"  value="{{ last_name }}" name="last-name"id="last-name" placeholder="Last Name">
+                                            </div>
+                                            <div class="form-group">  
+                                            <label for ="location"> Location </label>                                               
+                                                <input type="text" class="form-control"  value="{{ location }}" name="location" id="location" placeholder="Location">
+                                            </div>
+                                            <div class="form-group">  
+                                            <label for ="designation"> Designation </label>                                               
+                                                <input type="text" class="form-control" value="{{ designation }}" name="designation" id="designation" placeholder="Designation">
+                                            
+                                            </div>
+                                            <div class="form-group">  
+                                            <label for ="skills"> Skills </label>                                               
+                                                <input type="text" class="form-control"  value="{{ skills }}" name="skills"  id = "skills" placeholder="Skills">
+                                            </div>
+                                            <div class="form-group"> 
+                                            <label for ="about"> About </label>  
+                                             <textarea name="about" id="about" class="ckeditor" placeholder="About">{{ about }}</textarea>
+                                              
+                                            </div>
+                                            
+
+                                            </div>
+
+                                        </div>
+                                    
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update</button> &nbsp;&nbsp;
+                                  <a href="/dashboard/">  <button type="button"  class="btn btn-default">Cancel</button> </a>
+                                </div>
+                            </div>
+                        </div>
+                     
+    <script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+
+<script src="{% static 'assets/bundles/chartist.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/knob.bundle.js' %}"></script> <!-- Jquery Knob-->
+<script src="{% static 'assets/bundles/flotscripts.bundle.js' %}"></script> <!-- flot charts Plugin Js -->
+<script src="{% static 'assets/vendor/toastr/toastr.js' %}"></script>
+<script src="{% static 'assets/vendor/flot-charts/jquery.flot.selection.js' %}"></script>
+
+<script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/js/index.js' %}"></script>
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+{% comment %} <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>  {% endcomment %}
+
+
+</body>
+</html>

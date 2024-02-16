@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>:: SkillSpot :: Sign Up</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- VENDOR CSS -->
+    <link
+      rel="stylesheet"
+    
+      href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}"
+    />
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}" />
+  </head>
+
+  <body class="theme-cyan">
+   
+    <!-- WRAPPER -->
+    <div id="wrapper">
+      <div class="vertical-align-wrap">
+        <div class="vertical-align-middle auth-main">
+          <div class="auth-box">
+            <div class="top">
+                        <img src=" {%static 'assets/images/logo.jpg' %}" alt="Logo">
+
+            </div>
+            <div class="card">
+              <div class="header">
+                <p class="lead">Create an account</p>
+              </div>
+              <div class="body">
+                <form class="form-auth-small" method="post" action="{% url 'signup' %}">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label class="control-label sr-only">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="signup-email"
+                      id="signup-email"
+                      placeholder="Your email"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label sr-only">User Name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="signup-username"
+                      id="signup-username"
+                      placeholder="Your username"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label sr-only">Password</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      name="signup-password"
+                      id="signup-password"
+                      placeholder="Password"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label sr-only"
+                      >Re-Enter Password</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      name="signup-re-password"
+                      id="signup-re-password"
+                      placeholder="Password"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-lg btn-block"
+                  >
+                    REGISTER
+                  </button>
+                  <div>
+                     {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% elif message.tags == "error" %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+    </div>
+
+                  <div class="bottom">
+                    <span class="helper-text"
+                      >Already have an account? <a href="/login/">Login</a></span
+                    >
+                  </div>
+                </form>
+                          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END WRAPPER -->
+  </body>
+
+</html>

@@ -1,0 +1,138 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+
+<head>
+<title>:: SkillSpot :: Dashboard</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<!-- VENDOR CSS -->
+<link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist/css/chartist.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css' %}">
+{% comment %} <link rel="stylesheet" href="{% static 'assets/vendor/toastr/toastr.min.css' %}"> {% endcomment %}
+
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}">
+{% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> {% endcomment %}
+
+</head>
+<body class="theme-cyan">
+
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="m-t-30"><img src="{%static 'assets\images\logo1.jpg' %}" width="90" height="90" alt="logo"></div>
+        
+        <p>Please wait...</p>        
+    </div>
+</div>
+<!-- Overlay For Sidebars -->
+
+ <div id="wrapper"> 
+
+    <nav class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="{% url 'login' %}"><img src="{%static 'assets\images\logo2.jpg' %}" alt=" Logo" class="img-responsive logo"></a>                
+            </div>
+            
+          <div class="navbar-right">
+                <form id="navbar-search" class="navbar-form search-form"  method="get" action="{%url 'search' %}">
+                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search here..." type="text">
+                    <button type="submit" class="btn btn-default"><i class="icon-magnifier"></i></button>
+                </form>
+             
+
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav">
+                
+                        <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block mt-3 px-2" style="font-size:16px"> 
+                              {% if user_name %}
+
+                            <p>Welcome, {{ user_name }}!</p>
+                                {% else %}
+                                        <p>Welcome, Guest!</p>
+                               {% endif %} 
+
+                        </li>
+                        
+                <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout"></i></a>
+                        </li>
+                  
+                  
+     
+
+                        </li>
+                        </ul>
+        </div>
+        </div>
+        </div>
+    </nav>
+    
+    </div>
+<div>
+     <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block mt-3 px-2" style="font-size:16px" >
+                    
+                       {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="alert alert-success" style="font-size:16px" role="alert">{{ message }}</div>
+        {% elif message.tags == "error" %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+                    </li>
+            </div>
+
+
+
+<!-- Javascript -->
+
+<script src="assets/bundles/datatablescripts.bundle.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+
+<script src="../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
+
+
+<script src="assets/js/pages/tables/jquery-datatable.js"></script>
+{% comment %}  {% endcomment %}
+<script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+
+<script src="{% static 'assets/bundles/chartist.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/knob.bundle.js' %}"></script> 
+<script src="{% static 'assets/bundles/flotscripts.bundle.js' %}"></script> 
+<script src="{% static 'assets/vendor/flot-charts/jquery.flot.selection.js' %}"></script>
+
+<script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/js/index.js' %}"></script>
+<!-- Include Bootstrap CSS -->
+
+<!-- Include Bootstrap JS and Popper.js (required for Bootstrap dropdown) -->
+{% comment %} <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> {% endcomment %}
+
+</body>
+
+
+</html>

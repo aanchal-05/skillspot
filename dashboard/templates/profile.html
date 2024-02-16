@@ -1,0 +1,232 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+
+<head>
+<title>:: SkillSpot :: Profile</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<!-- VENDOR CSS -->
+<link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist/css/chartist.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css' %}">
+<link rel="stylesheet" href="{% static 'assets/vendor/toastr/toastr.min.css' %}">
+
+<!-- MAIN CSS -->
+<link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}">
+</head>
+<body class="theme-cyan">
+
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="m-t-30"><img src="{%static 'assets\images\logo1.jpg' %}" width="90" height="90" alt="Logo"></div>
+        <p>Please wait...</p>        
+    </div>
+</div>
+
+<!-- Overlay For Sidebars -->
+
+<div id="wrapper">
+
+
+   <nav class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="{% url 'login' %}"><img src="{%static 'assets\images\logo2.jpg' %}" alt=" Logo" class="img-responsive logo"></a>                
+            </div>
+            
+          <div class="navbar-right">
+                <form id="navbar-search" class="navbar-form search-form"  method="get" action="{%url 'search' %}">
+                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search here..." type="text">
+                    <button type="submit" class="btn btn-default"><i class="icon-magnifier"></i></button>
+                </form>
+             
+
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav">
+                
+                        <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block mt-3 px-2" style="font-size:16px"> 
+                              {% if user_name %}
+
+                            <p>Welcome, {{ user_name }}!</p>
+                                {% else %}
+                                        <p>Welcome, Guest!</p>
+                               {% endif %} 
+
+                        </li>
+                        
+                <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note"></i></a>
+                        </li>
+                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
+                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout"></i></a>
+                        </li>
+                  
+                  
+     
+
+                        </li>
+                        </ul>
+        </div>
+        </div>
+        </div>
+    </nav>
+                         </div> 
+
+<div id="main-content" class="profilepage_1">
+        <div class="container">
+                <div class="row clearfix">
+
+                <div class="col-lg-4 col-md-12">
+                    <div class="card member-card">
+                        <div class="header l-coral">
+                            <h4 class="m-t-10 text-light">{{ data.name }} {{data.last_name }}</h4>
+                        </div>
+                        <div class="member-img">
+                            <a href="patient-invoice.html">
+                            <img src="{% static 'assets/images/sm/avatar2.jpg' %}" class="rounded-circle" alt="profile-image">
+                            </a>
+                        </div>
+                        <div class="body">
+                           
+                            <strong>Designation</strong>
+                            <p>{{ data.designation }}</p>
+                            <strong>Email ID</strong>
+                            <p>{{ data.email }}</p>
+                            <strong>Location</strong>
+                            <p>{{ data.location }}</p>
+                            <hr>
+                            <strong>Skills</strong>
+                            <address>{{ data.skills }}</address>
+                        </div>
+                    </div>
+                </div>
+
+    <div class="col">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="body">
+                             <ul class="nav nav-tabs-new2">                                
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >About</a></li>
+                               
+                            </ul>                         
+                             <div class="tab-content mt-3">
+                                          
+                                          
+                                <div class="tab-pane active" id="Activity">
+                       {{ data.about | safe }}
+
+
+ 
+                                 
+                  <ul class="nav nav-tabs-new2">                                
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >Rating And Reviews </a></li>
+                            </ul>                         
+                             <div class="tab-content mt-3">
+                                          
+                                          
+                                <div class="tab-pane active" id="About">
+                                 <p>   {{data.review}} </p>
+                                  
+                        
+
+                           </div>
+                           </div>
+                           </div>
+                           </div>
+                                 
+                        </div>
+                    </div>
+                </div>
+{% comment %}  {% endcomment %}
+                <div class="col-lg-12 col-md-12"> 
+                                    <div class="card">
+                                        <div class="body">
+                                            {% comment %} <ul class="nav nav-tabs-new2">                                
+                                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >About</a></li>
+                                            
+                                            </ul>                          {% endcomment %}
+                                            {% comment %} <div class="tab-content mt-3">
+                                                        
+                                                        
+                                                <div class="tab-pane active" id="About">
+                                    {{ data.about | safe }} {% endcomment %}
+
+
+                
+                                                
+                                <ul class="nav nav-tabs-new2">                                
+                                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >Rating And Reviews </a></li>
+                                            
+                                            </ul>                         
+                                            <div class="tab-content mt-3">
+                                                        
+                                                        
+                                                <div class="tab-pane active" id="About">
+
+                                                <div class="form-group">
+                                    {% comment %} <label>Text Area</label> {% endcomment %}
+                                    
+
+            <form action="{% url 'profile' email=data.email %}" method="get">
+                                    
+
+                                    <textarea class="form-control" rows="5" cols="30" id="review-box" name="review-box"></textarea>
+                                    
+
+                                     <button type="submit" class="btn btn-primary mt-2"> Add Rating</button>
+                                       </form>
+                                </div>
+                                        
+                                            
+                        
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                        
+                                            
+                                    
+                            
+                                
+                </div>
+
+                </div>
+</div>
+</div>
+</div>
+
+
+
+
+                        
+<script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+
+<script src="{% static 'assets/bundles/chartist.bundle.js' %}"></script>
+<script src="{% static 'assets/bundles/knob.bundle.js' %}"></script> <!-- Jquery Knob-->
+<script src="{% static 'assets/bundles/flotscripts.bundle.js' %}"></script> <!-- flot charts Plugin Js -->
+
+<script src="{% static 'assets/vendor/flot-charts/jquery.flot.selection.js' %}"></script>
+
+<script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+<script src="{% static 'assets/js/index.js' %}"></script>
+
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+
+</body>
+
+</html>
