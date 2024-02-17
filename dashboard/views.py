@@ -3,6 +3,10 @@ from authentication.logic import *
 from authentication.logic import auth
 from dashboard.models import Review
 from authentication.models import UserDetails
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+from django.db.models import Avg
+
 
 
 
@@ -188,6 +192,7 @@ def search(request):
 
 @auth()
 def profile(request,reviewemail):
+   
     user_being_reviewed = UserDetails.objects.get(email=reviewemail)
     user = UserDetails.objects.get(email=reviewemail)
     print(user)
@@ -202,7 +207,24 @@ def profile(request,reviewemail):
        
         
     }
-      
+    rate = request.GET.get('rate', None)
+    print(rate, "rate")
+    if(rate):
+        review1=Review(
+            rating=rate,
+            reviewer=request.user,  # Set reviewer to the user giving the review
+            user_being_reviewed=user_being_reviewed
+        )
+        review1.save()
+    # user_detail = UserDetails.objects.all()
+    # for user in user_detail:
+
+    avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
+    print(avg_rating)
+    user.avgrating=avg_rating
+    user.save()
+    print(user)
+
     if request.method=='POST':
         reviewbox= request.POST.get("review-box")
         if reviewbox:
@@ -232,7 +254,8 @@ def profile(request,reviewemail):
                 'content': users.content,
                 'reviewer': users.reviewer.email,
 
-                'user_being_reviewed': users.user_being_reviewed.email
+                'user_being_reviewed': users.user_being_reviewed.email,
+                # 'rating':users.rating
 
 
                 }     
@@ -251,136 +274,27 @@ def profile(request,reviewemail):
     
     return render(request, 'profile.html',{ 'data' : data})
 
-    
-
-#     return render(request, 'profile.html',{ 'data' : data
-#      },)
-    
-# @auth(by_pass_route=True)
-# def profile_logic(request,reviewemail):
-#     user_being_reviewed = UserDetails.objects.get(email=reviewemail)
-
-#     if request.method=='POST':
-#         reviewbox= request.POST.get("review-box")
-#         if reviewbox:
-#             # user = UserDetails.objects.get(email=email)
-#             review = Review(
-#                 content=reviewbox,
-#                 reviewer=request.user,  # Set reviewer to the user giving the review
-#                 user_being_reviewed=user_being_reviewed
-#             )
-#             review.save()
-#             print('yyy')
-#         else:
-#             print('else')
-
-#     else:
-#         print('else entered')
-   
-#     reviewuser=Review.objects.filter(reviewer_id=reviewemail)
-#     print(reviewuser)
-#     if reviewuser:
-#         result_review_user = []
-
-#         for users in reviewuser:
-
-            
-#             result_review_data = {
-#                 'content': users.content,
-#                 'reviewer': users.reviewer.email,
-
-#                 'user_being_reviewed': users.user_being_reviewed.email
 
 
-#                 }     
-#             result_review_user.append(result_review_data)
-#         print('###')
-#         print(result_review_user)
-#         # print(result_review_user[0]['reviewer'].email)
-
-#         print('###')
-#         # print(result_review_user)
-#         return render(request, 'profile.html',{   'result_review_user' : result_review_user
-#      },)
-        
-
-# @auth(by_pass_route=True)
-# def profile(request,reviewemail):
-#     if request.method == "GET":
-        
-
-#         if request.user:
-#             user = UserDetails.objects.get(email=reviewemail)
-#             print(user)
-#             data = {
-#             "email" : user.email,
-#             "name":user.name,
-#             "last_name":user.last_name,
-#             'designation': user.designation,
-#             'skills': user.skills,
-#             'location': user.location,
-#             'about':user.about, 
-       
-#             }
-#         return render (request, "profile.html", {'data': data})
-    
-#     elif request.method == "POST":
-#         return profile_logic(request,reviewemail)
+# views.py
+def rate(request,reviewemail, rate):
+    return HttpResponse("hi")
 
 
-# def reviewprofile(request,reviewemail):
-# #  user_being_reviewed = UserDetails.objects.get(email=reviewemail)
-#     print(request.method)
-#     print('request')
-#     if request.method=='POST':
-#         user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+# @require_POST
+# def rate_post(request, post_id):
+#     try:
+#         rating = int(request.POST.get('rating', 0))
+#         # Ensure the rating is within a valid range (e.g., 1 to 5)
+#         rating = max(1, min(5, rating))
 
-#         reviewbox= request.POST.get("review-box")
-#         if reviewbox:
-#             # user = UserDetails.objects.get(email=email)
-#             review = Review(
-#                 content=reviewbox,
-#                 reviewer=request.user,  # Set reviewer to the user giving the review
-#                 user_being_reviewed=user_being_reviewed
-#             )
-#             review.save()
-#             print('yyy')
-#         else:
-#             print('else')
+#         # Assuming 'post_id' is the ID of the post you're rating
+#         post = Review.objects.get(id=post_id)
+#         post.rating = rating
+#         post.save()
 
-#     else:
-#          print('else entered')
-   
-#     reviewuser=Review.objects.filter(user_being_reviewed=reviewemail)
-#     print(reviewuser)
-#     if reviewuser:
-#         result_review_user = []
+#         response_data = {'success': True, 'message': 'Rating updated successfully'}
+#     except Exception as e:
+#         response_data = {'success': False, 'message': str(e)}
 
-#         for users in reviewuser:
-
-            
-#             result_review_data = {
-#                 'content': users.content,
-#                 'reviewer': users.reviewer.email,
-
-#                 'user_being_reviewed': users.user_being_reviewed.email
-
-
-#                 }     
-#             result_review_user.append(result_review_data)
-#         print('###')
-#         print(result_review_user)
-#         # print(result_review_user[0]['reviewer'].email)
-
-#         print('###')
-#         # print(result_review_user)
-#     return render(request, 'profile.html',{ 'result_review_user' : result_review_user
-#      },)
-    
-       
-    
-        
-
-            
-    
-
+#     return JsonResponse(response_data)

@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'authentication',
     'dashboard',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'star_ratings'
+
 
 
 ]
