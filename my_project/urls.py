@@ -26,13 +26,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login, name="login"),
     path('signup/', signup, name="signup"),
-    path('dashboard/',dashboard, name="dashboard" ),
+    path('dashboard/',dashboard, name="dashboard"),
     path('logout/' ,logout, name="logout"),
     path('update_profile/', update_profile ,name="update_profile"),
     path('view_profile/', view_profile, name="view_profile"),
     path('search/', search, name="search"),
-    path('search/profile/<str:email>', profile, name="profile"),
-    path('search/reviewprofile/<str:email>', profile, name="reviewprofile")
+    path('search/profile/<str:reviewemail>', profile, name="profile"),
+    path('search/reviewprofile/<str:reviewemail>', reviewprofile, name="reviewprofile")
 
 
 

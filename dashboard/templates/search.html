@@ -109,7 +109,7 @@
                                        
                                        {% for result_data in result_data_list %}
                                        <tr> 
-        <td> <a href="{% url 'profile' email=result_data.email %}"  style = "text-decoration:none;"> {{ result_data.name }} {{result_data.last_name}} </a> </td>
+        <td> <a href="{% url 'profile' reviewemail=result_data.email %}"  style = "text-decoration:none;"> {{ result_data.name }} {{result_data.last_name}} </a> </td>
         <td> {{ result_data.designation }}</td>
         <td>{{ result_data.location }}</td>
 

@@ -138,8 +138,11 @@
                                           
                                           
                                 <div class="tab-pane active" id="About">
-                                 <p>   {{data.review}} </p>
-                                  
+                             {% for review_user in result_review_user %}
+
+                                  <p>  {{ review_user.content }}     by {{ review_user.reviewer }}  </p>
+                                
+                                 {% endfor %} 
                         
 
                            </div>
@@ -172,16 +175,19 @@
                                             
                                             </ul>                         
                                             <div class="tab-content mt-3">
-                                                        
+
                                                         
                                                 <div class="tab-pane active" id="About">
 
                                                 <div class="form-group">
                                     {% comment %} <label>Text Area</label> {% endcomment %}
+    {% comment %} return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user {% endcomment %}
+                                  {% comment %} <p>  {{ result_review_user.content }}   <p>  by <p> {{ result_review_user.reviewer }}  </p> {% endcomment %}
                                     
 
-            <form action="{% url 'profile' email=data.email %}" method="get">
-                                    
+            <form action="{% url 'profile' reviewemail=data.email %}" method="post">
+                           {% csrf_token %}
+             
 
                                     <textarea class="form-control" rows="5" cols="30" id="review-box" name="review-box"></textarea>
                                     
