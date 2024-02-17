@@ -91,8 +91,34 @@ def view_profile(request):
         
 
         if request.user:
-            # user_being_reviewed = UserDetails.objects.get(email=email)
+            user_being_reviewed = Review.objects.filter(user_being_reviewed_id=request.user.email)
+            if(user_being_reviewed):
+                print(user_being_reviewed)
+                review_data_list = []
 
+                for reviews in user_being_reviewed:
+
+            
+                    review_data = {
+                    'content': reviews.content,
+                    'reviewer': reviews.reviewer.email,
+
+                    'user_being_reviewed': reviews.user_being_reviewed.email
+
+
+                }   
+                    review_data_list.append(review_data) 
+                print(review_data_list) 
+                return render(request, "view_profile.html", {'review_data_list': review_data_list,  "email": request.user.email,
+                    "name": request.user.name,
+                    "last_name": request.user.last_name,
+                    "location": request.user.location,
+                    "skills": request.user.skills,
+                    "designation": request.user.designation,
+                    "about": request.user.about})
+            
+            
+            
             return render(
                 request,
                 "view_profile.html",
@@ -109,6 +135,7 @@ def view_profile(request):
                     # else "",
                 },
             )
+
          
         messages.error(request, "You are not authorized to view this page.")
         return redirect('/login/')
@@ -193,7 +220,7 @@ def profile(request,reviewemail):
     else:
         print('else entered')
    
-    reviewuser=Review.objects.filter(reviewer_id=reviewemail)
+    reviewuser=Review.objects.filter(user_being_reviewed_id=reviewemail)
     print(reviewuser)
     if reviewuser:
         result_review_user = []
@@ -222,6 +249,7 @@ def profile(request,reviewemail):
     else:
          print('no review')
     
+    return render(request, 'profile.html',{ 'data' : data})
 
     
 
@@ -300,54 +328,54 @@ def profile(request,reviewemail):
 #         return profile_logic(request,reviewemail)
 
 
-def reviewprofile(request,reviewemail):
-#  user_being_reviewed = UserDetails.objects.get(email=reviewemail)
-    print(request.method)
-    print('request')
-    if request.method=='POST':
-        user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+# def reviewprofile(request,reviewemail):
+# #  user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+#     print(request.method)
+#     print('request')
+#     if request.method=='POST':
+#         user_being_reviewed = UserDetails.objects.get(email=reviewemail)
 
-        reviewbox= request.POST.get("review-box")
-        if reviewbox:
-            # user = UserDetails.objects.get(email=email)
-            review = Review(
-                content=reviewbox,
-                reviewer=request.user,  # Set reviewer to the user giving the review
-                user_being_reviewed=user_being_reviewed
-            )
-            review.save()
-            print('yyy')
-        else:
-            print('else')
+#         reviewbox= request.POST.get("review-box")
+#         if reviewbox:
+#             # user = UserDetails.objects.get(email=email)
+#             review = Review(
+#                 content=reviewbox,
+#                 reviewer=request.user,  # Set reviewer to the user giving the review
+#                 user_being_reviewed=user_being_reviewed
+#             )
+#             review.save()
+#             print('yyy')
+#         else:
+#             print('else')
 
-    else:
-         print('else entered')
+#     else:
+#          print('else entered')
    
-    reviewuser=Review.objects.filter(reviewer_id=reviewemail)
-    print(reviewuser)
-    if reviewuser:
-        result_review_user = []
+#     reviewuser=Review.objects.filter(user_being_reviewed=reviewemail)
+#     print(reviewuser)
+#     if reviewuser:
+#         result_review_user = []
 
-        for users in reviewuser:
+#         for users in reviewuser:
 
             
-            result_review_data = {
-                'content': users.content,
-                'reviewer': users.reviewer.email,
+#             result_review_data = {
+#                 'content': users.content,
+#                 'reviewer': users.reviewer.email,
 
-                'user_being_reviewed': users.user_being_reviewed.email
+#                 'user_being_reviewed': users.user_being_reviewed.email
 
 
-                }     
-            result_review_user.append(result_review_data)
-        print('###')
-        print(result_review_user)
-        # print(result_review_user[0]['reviewer'].email)
+#                 }     
+#             result_review_user.append(result_review_data)
+#         print('###')
+#         print(result_review_user)
+#         # print(result_review_user[0]['reviewer'].email)
 
-        print('###')
-        # print(result_review_user)
-    return render(request, 'profile.html',{ 'result_review_user' : result_review_user
-     },)
+#         print('###')
+#         # print(result_review_user)
+#     return render(request, 'profile.html',{ 'result_review_user' : result_review_user
+#      },)
     
        
     

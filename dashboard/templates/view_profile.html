@@ -138,7 +138,11 @@
                                           
                                           
                                  <div class="tab-pane active" id="About">
-                           <p> {{ review }}</p>
+                                                        {% for review_data_user in review_data_list %}
+
+                                  <p>  {{ review_data_user.content }}     by {{ review_data_user.reviewer }}  </p>
+                                
+                                 {% endfor %} 
                                 
                         </div>
                     </div>
