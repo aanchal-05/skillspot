@@ -19,7 +19,7 @@ class UserDetails(models.Model):
     # about= models.TextField(blank=True, null=True)
     about= RichTextField(blank=True, null=True)
     review= models.CharField(max_length=1000,blank=True, null=True)
-    avgrating= models.IntegerField(default=0)
+    avgrating= models.FloatField(default=0)
 
 
 

@@ -3,12 +3,8 @@ from authentication.logic import *
 from authentication.logic import auth
 from dashboard.models import Review
 from authentication.models import UserDetails
-from django.views.decorators.http import require_POST
-from django.http import JsonResponse
+
 from django.db.models import Avg
-
-
-
 
 
 
@@ -113,16 +109,20 @@ def view_profile(request):
                 }   
                     review_data_list.append(review_data) 
                 print(review_data_list) 
+                print(request.user.avgrating)
                 return render(request, "view_profile.html", {'review_data_list': review_data_list,  "email": request.user.email,
                     "name": request.user.name,
                     "last_name": request.user.last_name,
                     "location": request.user.location,
                     "skills": request.user.skills,
                     "designation": request.user.designation,
-                    "about": request.user.about})
+                    "about": request.user.about,
+                    "avgrating":request.user.avgrating
+                    })
             
             
-            
+            # print(request.user.avgrating)
+
             return render(
                 request,
                 "view_profile.html",
@@ -134,6 +134,7 @@ def view_profile(request):
                     "skills": request.user.skills,
                     "designation": request.user.designation,
                     "about": request.user.about,
+                    "avgrating":request.user.avgrating
                     # "review": request.user.review
                     # if request.user.date_of_birth
                     # else "",
@@ -165,7 +166,8 @@ def search(request):
                     'last_name':users.last_name,
                     'designation': users.designation,
                     'skills': users.skills,
-                    'location': users.location
+                    'location': users.location,
+                    'avgrating':users.avgrating
             
 
                     }     
@@ -184,7 +186,7 @@ def search(request):
             return redirect("/dashboard/")
 
 
-    return render(request, 'search.html', { 'result_data_list' : result_data_list
+    return render(request, 'search.html', { 'result_data_list' : result_data_list, 'user_name':request.user.name
     },
     )
 
@@ -216,14 +218,18 @@ def profile(request,reviewemail):
             user_being_reviewed=user_being_reviewed
         )
         review1.save()
-    # user_detail = UserDetails.objects.all()
-    # for user in user_detail:
+    
 
     avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
     print(avg_rating)
     user.avgrating=avg_rating
     user.save()
-    print(user)
+    print(user.avgrating)
+    
+    
+        # return render(request, 'profile.html',{ 'data' : data,  'avg_rating' : avg_rating , 'user_name': request.user.name
+    #  },)
+
 
     if request.method=='POST':
         reviewbox= request.POST.get("review-box")
@@ -266,35 +272,14 @@ def profile(request,reviewemail):
 
         print('###')
         # print(result_review_user)
-        return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user
+        return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name, 'avgrating': avg_rating
      },)
     
     else:
          print('no review')
     
-    return render(request, 'profile.html',{ 'data' : data})
+    return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, 'avgrating': avg_rating})
 
 
 
-# views.py
-def rate(request,reviewemail, rate):
-    return HttpResponse("hi")
 
-
-# @require_POST
-# def rate_post(request, post_id):
-#     try:
-#         rating = int(request.POST.get('rating', 0))
-#         # Ensure the rating is within a valid range (e.g., 1 to 5)
-#         rating = max(1, min(5, rating))
-
-#         # Assuming 'post_id' is the ID of the post you're rating
-#         post = Review.objects.get(id=post_id)
-#         post.rating = rating
-#         post.save()
-
-#         response_data = {'success': True, 'message': 'Rating updated successfully'}
-#     except Exception as e:
-#         response_data = {'success': False, 'message': str(e)}
-
-#     return JsonResponse(response_data)

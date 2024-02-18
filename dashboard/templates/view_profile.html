@@ -23,6 +23,26 @@
 <!-- MAIN CSS -->
 <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
 <link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}">
+<style>
+        .rating-list li {
+          float: right;
+          color: #ddd;
+          padding: 10px 5px;
+        }
+
+        .rating-list li:hover,
+        .rating-list li:hover ~ li {
+          color: orange;
+        }
+
+        .rating-list {
+          display: inline-block;
+          list-style: none;
+        }
+        .checked {
+            color: orange;
+        }
+    </style>
 </head>
 <body class="theme-cyan">
 
@@ -34,7 +54,6 @@
     </div>
 </div>
 
-{% comment %} {% include 'navbar.html' %} {% endcomment %}
 <!-- Overlay For Sidebars -->
 
 <div id="wrapper">
@@ -48,7 +67,7 @@
             
           <div class="navbar-right">
                 <form id="navbar-search" class="navbar-form search-form"  method="get" action="{%url 'search' %}">
-                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search here..." type="text">
+                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search Skill here..." type="text">
                     <button type="submit" class="btn btn-default"><i class="icon-magnifier"></i></button>
                 </form>
              
@@ -57,9 +76,9 @@
                     <ul class="nav navbar-nav">
                 
                         <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block mt-3 px-2" style="font-size:16px"> 
-                              {% if user_name %}
+                              {% if name %}
 
-                            <p>Welcome, {{ user_name }}!</p>
+                            <p>Welcome, {{ name }}!</p>
                                 {% else %}
                                         <p>Welcome, Guest!</p>
                                {% endif %} 
@@ -67,13 +86,13 @@
                         </li>
                         
                 <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
-                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user"></i></a>
+                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user" title= "View Profile"></i></a>
                         </li>
                          <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
-                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note"></i></a>
+                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note" title= "Update Profile"></i></a>
                         </li>
                          <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
-                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout"></i></a>
+                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout"title= "Logout"></i></a>
                         </li>
                   
                   
@@ -100,6 +119,15 @@
                             </a>
                         </div>
                         <div class="body">
+                           <strong>Average Rating </strong>
+                          <p> 
+              
+                <span> <i class="icon-star {% if avgrating > 0 %} checked {% endif %}"> </i></span>
+                <span> <i class="icon-star {% if avgrating > 1 %} checked {% endif %}"> </i></span>
+                <span> <i class="icon-star  {% if avgrating > 2 %} checked {% endif %}"></i></span>
+                <span ><i class="icon-star  {% if avgrating > 3 %} checked {% endif %}" > </i></span>
+                <span> <i class="icon-star  {% if avgrating > 4 %} checked {% endif %}"> </i></span>
+            </p> 
                             <strong>Designation</strong>
                             <p>{{ designation }}</p>
                             <strong>Email ID</strong>
@@ -131,7 +159,7 @@
  
                                  
                   <ul class="nav nav-tabs-new2">                                
-                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >Rating And Reviews </a></li>
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" > Reviews </a></li>
                                
                             </ul>                         
                              <div class="tab-content mt-3">
@@ -139,9 +167,10 @@
                                           
                                  <div class="tab-pane active" id="About">
                                                         {% for review_data_user in review_data_list %}
+                                                               {% if review_data_user.content %}
 
                                   <p>  {{ review_data_user.content }}     by {{ review_data_user.reviewer }}  </p>
-                                
+                                  {% endif %}
                                  {% endfor %} 
                                 
                         </div>

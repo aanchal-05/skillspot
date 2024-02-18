@@ -70,7 +70,7 @@
             
           <div class="navbar-right">
                 <form id="navbar-search" class="navbar-form search-form"  method="get" action="{%url 'search' %}">
-                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search here..." type="text">
+                    <input value=""  name="search-skills" id= "search-skills" class="form-control" placeholder="Search Skill here..." type="text">
                     <button type="submit" class="btn btn-default"><i class="icon-magnifier"></i></button>
                 </form>
              
@@ -89,13 +89,13 @@
                         </li>
                         
                 <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
-                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user"></i></a>
+                            <a href="{%url 'view_profile' %}" class="icon-menu"><i class="icon-user" title= "View Profile"></i></a>
                         </li>
                          <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
-                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note"></i></a>
+                            <a href="{%url 'update_profile' %}" class="icon-menu"><i class="icon-note" title= "Update Profile"></i></a>
                         </li>
                          <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
-                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout"></i></a>
+                            <a href="{%url 'logout' %}" class="icon-menu"><i class="icon-logout" title= "Logout"></i></a>
                         </li>
                   
                   
@@ -120,14 +120,23 @@
                         </div>
                         <div class="member-img">
                             <a href="patient-invoice.html">
-                            <img src="{% static 'assets/images/sm/avatar2.jpg' %}" class="rounded-circle" alt="profile-image">
+                            <img src="{% static 'assets/images/profile.jpg' %}" class="rounded-circle" alt="profile-image">
                             </a>
                         </div>
                         <div class="body">
-                           
+                            <strong>Average Rating </strong>
+                         <p>               
+               <span> <i class="icon-star {% if avgrating > 0 %} checked {% endif %}"> </i></span>
+                <span> <i class="icon-star {% if avgrating > 1 %} checked {% endif %}"> </i></span>
+                <span> <i class="icon-star  {% if avgrating > 2 %} checked {% endif %}"></i></span>
+                <span ><i class="icon-star  {% if avgrating > 3 %} checked {% endif %}" > </i></span>
+                <span> <i class="icon-star  {% if avgrating > 4 %} checked {% endif %}"> </i></span>
+            </p>
+
+                            
                             <strong>Designation</strong>
                             <p>{{ data.designation }}</p>
-                            <strong>Email ID</strong>
+                            <strong>Email ID <a href=" mailto: {{data.email}} " ><i class ="icon-envelope"> </i> </a> </strong>
                             <p>{{ data.email }}</p>
                             <strong>Location</strong>
                             <p>{{ data.location }}</p>
@@ -156,7 +165,7 @@
  
                                  
                   <ul class="nav nav-tabs-new2">                                
-                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >Rating And Reviews </a></li>
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" > Reviews </a></li>
                             </ul>                         
                              <div class="tab-content mt-3">
                                           
@@ -183,21 +192,12 @@
                 <div class="col-lg-12 col-md-12"> 
                                     <div class="card">
                                         <div class="body">
-                                            {% comment %} <ul class="nav nav-tabs-new2">                                
-                                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >About</a></li>
-                                            
-                                            </ul>                          {% endcomment %}
-                                            {% comment %} <div class="tab-content mt-3">
-                                                        
-                                                        
-                                                <div class="tab-pane active" id="About">
-                                    {{ data.about | safe }} {% endcomment %}
-
+                                           
 
                 
                                                 
                                 <ul class="nav nav-tabs-new2">                                
-                                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" >Rating And Reviews </a></li>
+                                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" > Reviews </a></li>
                                             
                                             </ul>                         
                                             <div class="tab-content mt-3">
@@ -206,9 +206,7 @@
                                                 <div class="tab-pane active" id="About">
 
                                                 <div class="form-group">
-                                    {% comment %} <label>Text Area</label> {% endcomment %}
-    {% comment %} return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user {% endcomment %}
-                                  {% comment %} <p>  {{ result_review_user.content }}   <p>  by <p> {{ result_review_user.reviewer }}  </p> {% endcomment %}
+                                
                                     
 
             <form action="{% url 'profile' reviewemail=data.email %}" method="post">
@@ -216,47 +214,22 @@
              
 
                                     <textarea class="form-control" rows="5" cols="30" id="review-box" name="review-box"></textarea>
-                                    {% comment %} <div class="container" style="padding: 2em"> {% endcomment %}
-    {% comment %} {% for post in posts %} {% endcomment %}
-        {% comment %} <div class="card" style="width: 30rem;"> {% endcomment %}
-          {% comment %} <img class="card-img-top" style="max-height: 15rem; overflow: hidden" {% endcomment %}
-               {% comment %} src="/static/000107507.jpg" alt="Card image cap"> {% endcomment %}
-          {% comment %} <div class="card-body">
-            <h5 class="card-title"></h5>
-            <p class="card-text"></p>
-            <h5 class="card-title">Avg rating:
-                <span class="fa fa-star {% if post.average_rating > 0 %} checked {% endif %}"></span>
-                <span class="fa fa-star {% if post.average_rating > 1 %} checked {% endif %}"></span>
-                <span class="fa fa-star {% if post.average_rating > 2 %} checked {% endif %}"></span>
-                <span class="fa fa-star {% if post.average_rating > 3 %} checked {% endif %}" ></span>
-                <span class="fa fa-star {% if post.average_rating > 4 %} checked {% endif %}"></span>
-            </h5> {% endcomment %}
-            <ul class="btn btn-light list-inline rating-list">
-            {% comment %} <li><a href="{% url 'profile' reviewemail=data.email %}?rate=1">Link Text</a></li> {% endcomment %}
-{% comment %} {% if post.user_rating > 4 %} checked {% endif %} {% endcomment %}
+                              <ul class="btn btn-light list-inline rating-list">
+        
               <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=5">
-                  <i class="fa fa-star " title="Rate 5"></i></li>
+                  <i class="icon-star" title="Rate 5"></i></li>
              <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=4">
-                  <i class="fa fa-star " title="Rate 4"></i></li>
+                  <i class="icon-star " title="Rate 4"></i></li>
                   <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=3">
-                  <i class="fa fa-star " title="Rate 3"></i></li>
+                  <i class="icon-star " title="Rate 3"></i></li>
                   <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=2">
-                  <i class="fa fa-star " title="Rate 2"></i></li>
+                  <i class="icon-star " title="Rate 2"></i></li>
                   <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=1">
-                  <i class="fa fa-star " title="Rate 1"></i></li>
+                  <i class="icon-star " title="Rate 1"></i></li>
 
 
-              {% comment %} <li onclick="rate(4, {{ data.email }})">
-                  <i class="fa fa-star {% if post.user_rating > 3 %} checked {% endif %}" title="Rate 4"></i></li>
-              <li onclick="rate(3, {{ data.email }})">
-                  <i class="fa fa-star {% if post.user_rating > 2 %} checked {% endif %}" title="Rate 3"></i></li>
-              <li onclick="rate(2, {{ data.email }})">
-                  <i class="fa fa-star {% if post.user_rating > 1 %} checked {% endif %}" title="Rate 2"></i></li>
-              <li onclick="rate(1, {{ data.email }})">
-                  <i class="fa fa-star {% if post.user_rating > 0 %} checked {% endif %}" title="Rate 1"></i></li>
-            </ul> {% endcomment %}
+             
           </div>
-        {% comment %} </div> {% endcomment %}
 
                                      <button type="submit" class="btn btn-primary mt-2"> Add Rating</button>
                                        </form>
