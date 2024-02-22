@@ -111,11 +111,11 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="card member-card">
                         <div class="header l-coral">
-                            <h4 class="m-t-10 text-light">{{ name }} {{last_name }}</h4>
+                            <h4 class="m-t-10 text-light">{{ name }} {{last_name }}  </h4>
                         </div>
                         <div class="member-img">
                             <a href="patient-invoice.html">
-                            <img src="{%static 'assets/images/profile.jpg' %}"class="rounded-circle" alt="profile-image">
+                            <img src="{% static 'assets/images/profile.jpg' %}" class="rounded-circle" alt="profile-image">
                             </a>
                         </div>
                         <div class="body">
@@ -169,7 +169,7 @@
                                                         {% for review_data_user in review_data_list %}
                                                                {% if review_data_user.content %}
 
-                                  <p>  {{ review_data_user.content }}     by {{ review_data_user.reviewer }}  </p>
+                                  <p> <b> {{ review_data_user.content }} </b>    reviewed by {{ review_data_user.reviewer }}  </p>
                                   {% endif %}
                                  {% endfor %} 
                                 

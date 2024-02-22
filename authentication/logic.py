@@ -2,7 +2,7 @@ import hashlib
 
 from django.contrib import messages
 from django.shortcuts import redirect
-
+import re
 from authentication.models import UserDetails
 
 
@@ -31,6 +31,11 @@ def profile_is_empty(user):
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
+def is_valid_password(password):
+    # Password should be at least 8 characters and contain at least one special character and one uppercase letter
+    return len(password) >= 8 and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and any(char.isupper() for char in password)
+
 
 
 def auth(by_pass_route=False):

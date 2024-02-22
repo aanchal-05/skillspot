@@ -11,18 +11,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<!-- VENDOR CSS -->
+
 <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}">
 
 <link rel="stylesheet" href="{% static 'assets/vendor/chartist/css/chartist.min.css' %}">
 <link rel="stylesheet" href="{% static 'assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css' %}">
-{% comment %} <link rel="stylesheet" href="{% static 'assets/vendor/toastr/toastr.min.css' %}"> {% endcomment %}
 
-<!-- MAIN CSS -->
+
 <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
 <link rel="stylesheet" href="{% static 'assets/css/color_skins.css' %}">
-{% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> {% endcomment %}
 
 </head>
 <body class="theme-cyan">
@@ -84,20 +82,21 @@
         </div>
         </div>
     </nav>
-    
-    </div>
-<div>
-     <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block mt-3 px-2" style="font-size:16px" >
+
+<div style="margin-top:100px">
+    <div class="container">
                     
                        {% for message in messages %}
         {% if message.tags == "success" %}
-            <div class="alert alert-success" style="font-size:16px" role="alert">{{ message }}</div>
+            <div class="alert alert-success" style="width:20%"  role="alert">{{ message }}</div>
         {% elif message.tags == "error" %}
             <div class="alert alert-danger" role="alert">{{ message }}</div>
         {% endif %}
     {% endfor %}
-                    </li>
             </div>
+        </div>
+</div>
+
 
 
 
@@ -114,7 +113,6 @@
 
 
 <script src="assets/js/pages/tables/jquery-datatable.js"></script>
-{% comment %}  {% endcomment %}
 <script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
 <script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
 
@@ -125,12 +123,6 @@
 
 <script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
 <script src="{% static 'assets/js/index.js' %}"></script>
-<!-- Include Bootstrap CSS -->
-
-<!-- Include Bootstrap JS and Popper.js (required for Bootstrap dropdown) -->
-{% comment %} <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> {% endcomment %}
 
 </body>
 

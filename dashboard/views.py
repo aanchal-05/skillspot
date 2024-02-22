@@ -26,22 +26,18 @@ def dashboard (request):
 def update_profile(request):
     
 
-    if request.method == "GET":        
+    if request.method == "GET":    
+        #if user authenticated    
         if request.user:
-            return render(
-                request,
-                "update_profile.html",
-                {
+            return render(request,"update_profile.html",{
                     "name": request.user.name,
                     "last_name": request.user.last_name,
                     "location": request.user.location,
                     "skills": request.user.skills,
                     "designation": request.user.designation,
                     "about": request.user.about,
-                    "review":request.user.review
-                
-                },
-            )   
+                    "review":request.user.review,
+                },)
          
         messages.error(request, "You are not authorized to view this page.")
         return redirect("/dashboard")
@@ -50,25 +46,31 @@ def update_profile(request):
         return update_profile_logic(request)
 
 
-@auth(by_pass_route=True)
 
+@auth(by_pass_route=True)
 def update_profile_logic(request):
-    print(request.method)
-    print("update")
-    if request.method == "POST":  # Corrected from "post" to "POST"
+
+    if request.method == "POST": 
+        #fetch data
         data = {
             "name": request.POST.get("first-name"),
             "last-name": request.POST.get("last-name"),
-            "location": request.POST.get("location"),  # Corrected from "loaction" to "location"
+            "location": request.POST.get("location"), 
             "designation": request.POST.get("designation"),
             "skills": request.POST.get("skills"),
-            "about": request.POST.get("about")
-
-
+            "about": request.POST.get("about"),
         }
-        print('data')
-
+        
+        # check if any field is empty  
+        for value in data.values():
+             if not value:
+                messages.error(request, "Fields cannot be empty")
+                return redirect("/update_profile/")   
+        
+        #save data
         user = UserDetails.objects.get(email=request.user.email)
+        # print(name)
+        print(user.name)
         user.name = data["name"]
         user.last_name = data["last-name"]
         user.location = data["location"]
@@ -76,19 +78,18 @@ def update_profile_logic(request):
         user.skills = data["skills"]
         user.about= data["about"]
         user.save()
+        
         messages.success(request, "Profile updated successfully.")
-        print('dashboard')
-
         return redirect("/dashboard/")
-    else:
-        print('enterd esle')
+    
     
     return render(request, "update_profile.html")
 
 @auth(by_pass_route=True)
 def view_profile(request):
     if request.method == "GET":
-        
+
+       #fetch reviewdetails from review table 
 
         if request.user:
             user_being_reviewed = Review.objects.filter(user_being_reviewed_id=request.user.email)
@@ -108,8 +109,10 @@ def view_profile(request):
 
                 }   
                     review_data_list.append(review_data) 
-                print(review_data_list) 
-                print(request.user.avgrating)
+                
+                # print (request.user.image)
+            
+
                 return render(request, "view_profile.html", {'review_data_list': review_data_list,  "email": request.user.email,
                     "name": request.user.name,
                     "last_name": request.user.last_name,
@@ -117,11 +120,10 @@ def view_profile(request):
                     "skills": request.user.skills,
                     "designation": request.user.designation,
                     "about": request.user.about,
-                    "avgrating":request.user.avgrating
+                    "avgrating":request.user.avgrating, 
+                
                     })
             
-            
-            # print(request.user.avgrating)
 
             return render(
                 request,
@@ -134,10 +136,10 @@ def view_profile(request):
                     "skills": request.user.skills,
                     "designation": request.user.designation,
                     "about": request.user.about,
-                    "avgrating":request.user.avgrating
-                    # "review": request.user.review
-                    # if request.user.date_of_birth
-                    # else "",
+                    "avgrating":request.user.avgrating,
+                    
+
+                    
                 },
             )
 
@@ -149,11 +151,9 @@ def view_profile(request):
 def search(request):
     if request.method=='GET':
         query=request.GET.get("search-skills")
-        print (query)
         if query:
             SearchResult=UserDetails.objects.filter(skills__contains=query)
 
-            print(SearchResult)
             if SearchResult:
                 result_data_list = []
 
@@ -181,7 +181,7 @@ def search(request):
                 print("not found")
                 return redirect("/dashboard/")
         else:
-            messages.error(request, "Nothing entered")
+            messages.error(request, "Nothing entered ")
             print("Nothing entered")
             return redirect("/dashboard/")
 
@@ -205,7 +205,8 @@ def profile(request,reviewemail):
         'designation': user.designation,
         'skills': user.skills,
         'location': user.location,
-        'about':user.about, 
+        'about':user.about
+    
        
         
     }
@@ -225,19 +226,14 @@ def profile(request,reviewemail):
     user.avgrating=avg_rating
     user.save()
     print(user.avgrating)
-    
-    
-        # return render(request, 'profile.html',{ 'data' : data,  'avg_rating' : avg_rating , 'user_name': request.user.name
-    #  },)
 
 
     if request.method=='POST':
         reviewbox= request.POST.get("review-box")
         if reviewbox:
-            # user = UserDetails.objects.get(email=email)
             review = Review(
                 content=reviewbox,
-                reviewer=request.user,  # Set reviewer to the user giving the review
+                reviewer=request.user, 
                 user_being_reviewed=user_being_reviewed
             )
             review.save()
@@ -261,17 +257,14 @@ def profile(request,reviewemail):
                 'reviewer': users.reviewer.email,
 
                 'user_being_reviewed': users.user_being_reviewed.email,
-                # 'rating':users.rating
 
 
                 }     
             result_review_user.append(result_review_data)
         print('###')
         print(result_review_user)
-        # print(result_review_user[0]['reviewer'].email)
 
         print('###')
-        # print(result_review_user)
         return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name, 'avgrating': avg_rating
      },)
     
