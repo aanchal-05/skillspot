@@ -13,8 +13,6 @@ urlpatterns = [
     path('search/profile/rating/<str:reviewemail>', rating, name="rating")
 
 
-    # path('search/reviewprofile/<str:reviewemail>','reviewprofile', name="reviewprofile")
-    # path('rate/<str:reviewemail>/<int:rate>/',rate, name"rate")
 ]
 
 if settings.DEBUG:

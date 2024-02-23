@@ -200,8 +200,9 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-12 col-md-12"> 
+                {% comment %}  if user and reviewer is same review and rating option not seen {% endcomment %}
+{% if data.email != user_email %} 
+             <div class="col-lg-12 col-md-12">  
                                     <div class="card">
                                         <div class="body">
                                            
@@ -264,33 +265,20 @@
                 </div>
 
                 </div>
-</div>
+</div> 
+{% endif %}
 </div>
 </div>
 
 
-<script>
-        const rate = (rating, post_id) => {
-            fetch(`/rate/${post_id}/${rating}/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(rest => {
-                window.location.reload();
-                // you may want to update the rating here
-                // to simplify stuff, I just reload the page
-            })
-        }
-    </script>
 
                         
 <script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
 <script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
 
 <script src="{% static 'assets/bundles/chartist.bundle.js' %}"></script>
-<script src="{% static 'assets/bundles/knob.bundle.js' %}"></script> <!-- Jquery Knob-->
-<script src="{% static 'assets/bundles/flotscripts.bundle.js' %}"></script> <!-- flot charts Plugin Js -->
+<script src="{% static 'assets/bundles/knob.bundle.js' %}"></script> 
+<script src="{% static 'assets/bundles/flotscripts.bundle.js' %}"></script> 
 
 <script src="{% static 'assets/vendor/flot-charts/jquery.flot.selection.js' %}"></script>
 

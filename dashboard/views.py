@@ -251,10 +251,10 @@ def reviewprofile(request,reviewemail):
                     }     
                 result_review_user.append(result_review_data)
             #if contains review
-            return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name
+            return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name, 'user_email': request.user.email
         },)
         #without reviews
-        return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name}) 
+        return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, 'user_email' :request.user.email}) 
      #when get post request 
     elif request.method=='POST':
         
