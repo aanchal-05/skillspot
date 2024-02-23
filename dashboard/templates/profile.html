@@ -187,7 +187,11 @@
                              {% for review_user in result_review_user %}
                              {% if review_user.content %}
 
-                                  <p>   <b>{{ review_user.content }}   </b> reviewed by {{ review_user.reviewer }}  </p>
+                                  <p>   <b>{{ review_user.content }}   </b> reviewed by {{ review_user.reviewer }}   
+                       <a href="{% url 'delete_review' review_id=review_user.id %}">
+
+                        <button type="button" class="btn btn-dark"> Delete   </button>     </p>                       
+                            </a>
                                 {% endif %}
                                  {% endfor %} 
                         

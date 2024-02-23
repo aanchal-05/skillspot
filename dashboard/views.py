@@ -246,6 +246,8 @@ def reviewprofile(request,reviewemail):
                     'reviewer': users.reviewer.email,
 
                     'user_being_reviewed': users.user_being_reviewed.email,
+                    'id' :users.id
+                    
 
 
                     }     
@@ -291,5 +293,23 @@ def rating (request, reviewemail):
         
         messages.error(request, "No rating given by you.")
         return redirect("/profile")
+
+
+@auth()
+def delete_review (request, review_id):
+        review = Review.objects.get(id=review_id)
+            # Check if the user has the permission to delete the review
+        if request.user == review.reviewer:
+            # Delete the review
+
+            review.delete()
+            messages.success(request, "Review deleted successfully.")
+        else:
+        # If the user doesn't have permission, handle it accordingly
+            messages.error(request, "You don't have permission to delete this review.")
+
+    # Redirect back to the user's profile page
+        return redirect('profile', reviewemail=review.user_being_reviewed.email)
+
 
  

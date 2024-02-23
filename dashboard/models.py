@@ -9,4 +9,6 @@ class Review(models.Model):
     user_being_reviewed = models.ForeignKey(UserDetails, on_delete=models.CASCADE, related_name='reviews_received')
     content = models.TextField()
     rating = models.IntegerField(default=0)
+    id = models.AutoField(primary_key=True)
+
     
