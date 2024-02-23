@@ -9,8 +9,8 @@ urlpatterns = [
     path('update_profile/', update_profile, name='update_profile'),
     path('view_profile/', view_profile, name='view_profile'),
     path('search/', search, name="search"),
-    path('search/profile/<str:reviewemail>', profile, name="profile")
-    # path('search/profile/rating/<str:reviewemail>', rating, name="rating")
+    path('search/profile/<str:reviewemail>', reviewprofile, name="profile")
+    path('search/profile/rating/<str:reviewemail>', rating, name="rating")
 
 
     # path('search/reviewprofile/<str:reviewemail>','reviewprofile', name="reviewprofile")

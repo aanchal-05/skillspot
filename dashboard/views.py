@@ -182,148 +182,95 @@ def search(request):
     },
     )
 
+@auth()
+def review_profile_logic(request,reviewemail):
+        # Get the user being reviewed
+    user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+        # Get the review content from the form
+    reviewbox= request.POST.get("review-box")
+    if reviewbox:
+            review = Review(
+             # Create and save the review
+                content=reviewbox,
+                reviewer=request.user, 
+                user_being_reviewed=user_being_reviewed
+            )
+            review.save()
+        
+            return redirect('profile' ,reviewemail=reviewemail)
 
+    else:
+        #if review box is empty
+        messages.error(request, "Cannot send empty review.")
+        return redirect('profile' ,reviewemail=reviewemail)
 
-# @auth()
-# def reviewprofile(request,reviewemail):
    
-#     user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+
+
+@auth()
+def reviewprofile(request,reviewemail):
+    if not request.user:
+         # Check if the user is authenticated
+        messages.error(request, "You are not authorized to view this page.")
+        return redirect('/login/')
     
-#     data = {
-#         "email" : user_being_reviewed.email,
-#         "name":user_being_reviewed.name,
-#         "last_name":user_being_reviewed.last_name,
-#         'designation': user_being_reviewed.designation,
-#         'skills': user_being_reviewed.skills,
-#         'location': user_being_reviewed.location,
-#         'about':user_being_reviewed.about,
-#         'avgrating':user_being_reviewed.avgrating
-#      }
-#     rate = request.GET.get('rate', None)
-#     # # print(rate, "rate")
-#     # if(rate):
-#     #     review1=Review(
-#     #         rating=rate,
-#     #         reviewer=request.user,  # Set reviewer to the user giving the review
-#     #         user_being_reviewed=user_being_reviewed
-#     #     )
-#     #     review1.save()
-    
+    if request.method=='GET':
+            # Fetch the user being reviewed
 
-#     # avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
-#     # print(avg_rating)
-#     # user.avgrating=avg_rating
-#     # user.save()
-#     # print(user.avgrating)
+        user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+             # Prepare data dictionary for rendering
 
+        data = {
+        "email" : user_being_reviewed.email,
+        "name":user_being_reviewed.name,
+        "last_name":user_being_reviewed.last_name,
+        'designation': user_being_reviewed.designation,
+        'skills': user_being_reviewed.skills,
+        'location': user_being_reviewed.location,
+        'about':user_being_reviewed.about,
+        'avgrating':user_being_reviewed.avgrating
+         }
+        
+        # Fetch reviews for the user being reviewed
 
-#     if request.method=='POST':
-#         reviewbox= request.POST.get("review-box")
-#         if reviewbox:
-#             review = Review(
-#                 content=reviewbox,
-#                 reviewer=request.user, 
-#                 user_being_reviewed=user_being_reviewed
-#             )
-#             review.save()
-#             print('yyy')
-#         else:
-#             print('else')
+        reviewuser=Review.objects.filter(user_being_reviewed_id=reviewemail)
+        
+        if reviewuser:
+            result_review_user = []
 
-#     else:
-#         print('else entered')
-   
-#     reviewuser=Review.objects.filter(user_being_reviewed_id=reviewemail)
-#     print(reviewuser)
-#     if reviewuser:
-#         result_review_user = []
+            for users in reviewuser:
 
-#         for users in reviewuser:
+                
+                result_review_data = {
+                    'content': users.content,
+                    'reviewer': users.reviewer.email,
 
-            
-#             result_review_data = {
-#                 'content': users.content,
-#                 'reviewer': users.reviewer.email,
-
-#                 'user_being_reviewed': users.user_being_reviewed.email,
+                    'user_being_reviewed': users.user_being_reviewed.email,
 
 
-#                 }     
-#             result_review_user.append(result_review_data)
-#         print('###')
-#         print(result_review_user)
-
-#         print('###')
-#         return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name
-#      },)
-    
-#     else:
-#          print('no review')
-    
-#     return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, 'avgrating': avg_rating})
-
-# @auth(by_pass_route=True)
-# def rating (request, reviewemail):
-#     user_being_reviewed = UserDetails.objects.get(email=reviewemail)
-#     rate = request.GET.get('rate', None)
-#     # print(rate, "rate")
-#     if(rate):
-#         review1=Review(
-#             rating=rate,
-#             reviewer=request.user,  # Set reviewer to the user giving the review
-#             user_being_reviewed=user_being_reviewed
-#         )
-#         review1.save()
-    
-
-#         avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
-#         print(avg_rating)
-#         user_being_reviewed .avgrating=avg_rating
-#         user_being_reviewed.save()
-#         return render (request, 'profile.html')
-#         # view_profile(reviewemail)
+                    }     
+                result_review_user.append(result_review_data)
+            #if contains review
+            return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name
+        },)
+        #without reviews
+        return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name}) 
+     #when get post request 
+    elif request.method=='POST':
+        
+        return review_profile_logic(request,reviewemail=reviewemail)
 
 
-
-#     #     data = {
-#     #     "email" : user_being_reviewed.email,
-#     #     "name":user_being_reviewed.name,
-#     #     "last_name":user_being_reviewed.last_name,
-#     #     'designation': user_being_reviewed.designation,
-#     #     'skills': user_being_reviewed.skills,
-#     #     'location': user_being_reviewed.location,
-#     #     'about':user_being_reviewed.about, 
-#     #     'avgrating':user_being_reviewed.avgrating
-#     #  }
-#     #     return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, })
-    
-#     else:
-#         messages.error(request, "No ratinng given by you.")
-#         return redirect("/profile")
 
 
 
 
 @auth()
-def profile(request,reviewemail):
-   
-    user_being_reviewed = UserDetails.objects.get(email=reviewemail)
-    user = UserDetails.objects.get(email=reviewemail)
-    print(user)
-    data = {
-        "email" : user.email,
-        "name":user.name,
-        "last_name":user.last_name,
-        'designation': user.designation,
-        'skills': user.skills,
-        'location': user.location,
-        'about':user.about
+def rating (request, reviewemail):
     
-       
-        
-    }
+    # Fetch rating
     rate = request.GET.get('rate', None)
-    print(rate, "rate")
+    #if rating exists save in database
     if(rate):
         review1=Review(
             rating=rate,
@@ -331,63 +278,18 @@ def profile(request,reviewemail):
             user_being_reviewed=user_being_reviewed
         )
         review1.save()
-    
 
-    avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
-    print(avg_rating)
-    user.avgrating=avg_rating
-    user.save()
-    print(user.avgrating)
-
-
-    if request.method=='POST':
-        reviewbox= request.POST.get("review-box")
-        if reviewbox:
-            review = Review(
-                content=reviewbox,
-                reviewer=request.user, 
-                user_being_reviewed=user_being_reviewed
-            )
-            review.save()
-            print('yyy')
-        else:
-            print('else')
+       # Fetch the user being reviewed
+        user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+        
+        avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
+        user_being_reviewed.avgrating=avg_rating
+        user_being_reviewed.save()
+        return redirect('profile' ,reviewemail=reviewemail)
 
     else:
-        print('else entered')
-   
-    reviewuser=Review.objects.filter(user_being_reviewed_id=reviewemail)
-    print(reviewuser)
-    if reviewuser:
-        result_review_user = []
+        
+        messages.error(request, "No rating given by you.")
+        return redirect("/profile")
 
-        for users in reviewuser:
-
-            
-            result_review_data = {
-                'content': users.content,
-                'reviewer': users.reviewer.email,
-
-                'user_being_reviewed': users.user_being_reviewed.email,
-
-
-                }     
-            result_review_user.append(result_review_data)
-        print('###')
-        print(result_review_user)
-
-        print('###')
-        return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name, 'avgrating': avg_rating
-     },)
-    
-    else:
-         print('no review')
-    
-    return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, 'avgrating': avg_rating})
-
-
-
-
-   
-
-
+ 

@@ -107,6 +107,19 @@
         </div>
     </nav>
                          </div> 
+                         <div style="margin-top:100px">
+    <div class="container">
+               {% comment %} <h4> hello </h4>      {% endcomment %}
+                       {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="alert alert-success" style="width:20%"  role="alert">{{ message }}</div>
+        {% elif message.tags == "error" %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+            </div>
+        </div>
+
 
 <div id="main-content" class="profilepage_1">
         <div class="container">
@@ -125,11 +138,11 @@
                         <div class="body">
                             <strong>Average Rating </strong>
                          <p>               
-               <span> <i class="icon-star {% if avgrating > 0 %} checked {% endif %}"> </i></span>
-                <span> <i class="icon-star {% if avgrating > 1 %} checked {% endif %}"> </i></span>
-                <span> <i class="icon-star  {% if avgrating > 2 %} checked {% endif %}"></i></span>
-                <span ><i class="icon-star  {% if avgrating > 3 %} checked {% endif %}" > </i></span>
-                <span> <i class="icon-star  {% if avgrating > 4 %} checked {% endif %}"> </i></span>
+               <span> <i class="icon-star {% if data.avgrating > 0 %} checked {% endif %}"> </i></span>
+                <span> <i class="icon-star {% if data.avgrating > 1 %} checked {% endif %}"> </i></span>
+                <span> <i class="icon-star  {% if data.avgrating > 2 %} checked {% endif %}"></i></span>
+                <span ><i class="icon-star  {% if data.avgrating > 3 %} checked {% endif %}" > </i></span>
+                <span> <i class="icon-star  {% if data.avgrating > 4 %} checked {% endif %}"> </i></span>
             </p>
 
                             
@@ -220,16 +233,16 @@
                                 
                                     
         
-              <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=5">
+              <li> <a href="{%url 'rating'  reviewemail=data.email %}?rate=5">
                   <i class="icon-star" title="Rate 5"></i></li>
-             <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=4">
+             <li> <a href="{%url 'rating'  reviewemail=data.email %}?rate=4">
                   <i class="icon-star " title="Rate 4"></i></li>
 
-                  <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=3">
+                  <li> <a href="{%url 'rating'  reviewemail=data.email %}?rate=3">
                   <i class="icon-star " title="Rate 3"></i></li>
-                  <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=2">
+                  <li> <a href="{%url 'rating'  reviewemail=data.email %}?rate=2">
                   <i class="icon-star " title="Rate 2"></i></li>
-                  <li> <a href="{%url 'profile'  reviewemail=data.email %}?rate=1">
+                  <li> <a href="{%url 'rating'  reviewemail=data.email %}?rate=1">
                   <i class="icon-star " title="Rate 1"></i></li>
 
               </ul>
