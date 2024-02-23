@@ -32,6 +32,8 @@ urlpatterns = [
     path('view_profile/', view_profile, name="view_profile"),
     path('search/', search, name="search"),
     path('search/profile/<str:reviewemail>', profile, name="profile")
+    # path('search/profile/rating/<str:reviewemail>', rating, name="rating")
+
     # path('rate/<str:reviewemail>/<int:rate>/',rate, name"rate")
 
     # path('search/reviewprofile/<str:reviewemail>', reviewprofile, name="reviewprofile")

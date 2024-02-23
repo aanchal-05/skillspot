@@ -87,33 +87,31 @@ def update_profile_logic(request):
 
 @auth(by_pass_route=True)
 def view_profile(request):
-    if request.method == "GET":
 
-       #fetch reviewdetails from review table 
+    # Check if the user is authenticated
+ 
+    if request.user:
 
-        if request.user:
-            user_being_reviewed = Review.objects.filter(user_being_reviewed_id=request.user.email)
-            if(user_being_reviewed):
-                print(user_being_reviewed)
-                review_data_list = []
+        # Fetch review details from the Review table for the logged-in user
 
-                for reviews in user_being_reviewed:
+        user_being_reviewed = Review.objects.filter(user_being_reviewed_id=request.user.email)
+        # Check if any reviews were found for logged in-user
 
-            
-                    review_data = {
+        if user_being_reviewed:
+            review_data_list = []
+            # Iterate through the reviews for the logged-in user
+
+            for reviews in user_being_reviewed:
+                review_data = {
                     'content': reviews.content,
                     'reviewer': reviews.reviewer.email,
-
                     'user_being_reviewed': reviews.user_being_reviewed.email
-
-
-                }   
-                    review_data_list.append(review_data) 
+            }   
+            review_data_list.append(review_data) 
                 
-                # print (request.user.image)
-            
-
-                return render(request, "view_profile.html", {'review_data_list': review_data_list,  "email": request.user.email,
+            # Render the view_profile.html template with review data and user details
+    
+            return render(request, "view_profile.html", {'review_data_list': review_data_list,  "email": request.user.email,
                     "name": request.user.name,
                     "last_name": request.user.last_name,
                     "location": request.user.location,
@@ -121,14 +119,11 @@ def view_profile(request):
                     "designation": request.user.designation,
                     "about": request.user.about,
                     "avgrating":request.user.avgrating, 
-                
-                    })
+                 })
             
+        # If no reviews were found, render the template with user details only
 
-            return render(
-                request,
-                "view_profile.html",
-                {    
+        return render(request,"view_profile.html",{    
                     "email": request.user.email,
                     "name": request.user.name,
                     "last_name": request.user.last_name,
@@ -137,58 +132,175 @@ def view_profile(request):
                     "designation": request.user.designation,
                     "about": request.user.about,
                     "avgrating":request.user.avgrating,
-                    
+                    },)
+             # If the user is not authenticated, display an error message
+      
+    messages.error(request, "You are not authorized to view this page.")
+    return redirect('/login/')
 
-                    
-                },
-            )
-
-         
-        messages.error(request, "You are not authorized to view this page.")
-        return redirect('/login/')
     
 @auth()
 def search(request):
     if request.method=='GET':
-        query=request.GET.get("search-skills")
-        if query:
-            SearchResult=UserDetails.objects.filter(skills__contains=query)
 
-            if SearchResult:
-                result_data_list = []
+        search_box=request.GET.get("search-skills")
 
-                for users in SearchResult:
+        # Check if the searchbox is empty
 
-            
-                    result_data = {
-                    'email': users.email,
-                    'name': users.name,
-                    'last_name':users.last_name,
-                    'designation': users.designation,
-                    'skills': users.skills,
-                    'location': users.location,
-                    'avgrating':users.avgrating
-            
-
-                    }     
-                    print(result_data)
-                    result_data_list.append(result_data)
-
-                # print(result_data_list)
-                print ('search')
-            else:
-                messages.error(request, "No search found")
-                print("not found")
-                return redirect("/dashboard/")
-        else:
-            messages.error(request, "Nothing entered ")
-            print("Nothing entered")
+        if not search_box:
+            messages.error(request, "You entered nothing in search-box")
             return redirect("/dashboard/")
+        
+        # Filter the UserDetails based on the search query
 
+        SearchResult=UserDetails.objects.filter(skills__contains=search_box)
 
+        # Check if any results were found
+
+        if not SearchResult:
+            messages.error(request, "No result found")
+            return redirect("/dashboard/")
+        
+        # Create a list of dictionaries containing the search results
+
+        result_data_list = []
+
+        for users in SearchResult:
+            result_data = {
+            'email': users.email,
+            'name': users.name,
+            'last_name':users.last_name,
+            'designation': users.designation,
+            'skills': users.skills,
+            'location': users.location,
+            'avgrating':users.avgrating
+            }           
+            
+            result_data_list.append(result_data)
+               
     return render(request, 'search.html', { 'result_data_list' : result_data_list, 'user_name':request.user.name
     },
     )
+
+
+
+# @auth()
+# def reviewprofile(request,reviewemail):
+   
+#     user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+    
+#     data = {
+#         "email" : user_being_reviewed.email,
+#         "name":user_being_reviewed.name,
+#         "last_name":user_being_reviewed.last_name,
+#         'designation': user_being_reviewed.designation,
+#         'skills': user_being_reviewed.skills,
+#         'location': user_being_reviewed.location,
+#         'about':user_being_reviewed.about,
+#         'avgrating':user_being_reviewed.avgrating
+#      }
+#     rate = request.GET.get('rate', None)
+#     # # print(rate, "rate")
+#     # if(rate):
+#     #     review1=Review(
+#     #         rating=rate,
+#     #         reviewer=request.user,  # Set reviewer to the user giving the review
+#     #         user_being_reviewed=user_being_reviewed
+#     #     )
+#     #     review1.save()
+    
+
+#     # avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
+#     # print(avg_rating)
+#     # user.avgrating=avg_rating
+#     # user.save()
+#     # print(user.avgrating)
+
+
+#     if request.method=='POST':
+#         reviewbox= request.POST.get("review-box")
+#         if reviewbox:
+#             review = Review(
+#                 content=reviewbox,
+#                 reviewer=request.user, 
+#                 user_being_reviewed=user_being_reviewed
+#             )
+#             review.save()
+#             print('yyy')
+#         else:
+#             print('else')
+
+#     else:
+#         print('else entered')
+   
+#     reviewuser=Review.objects.filter(user_being_reviewed_id=reviewemail)
+#     print(reviewuser)
+#     if reviewuser:
+#         result_review_user = []
+
+#         for users in reviewuser:
+
+            
+#             result_review_data = {
+#                 'content': users.content,
+#                 'reviewer': users.reviewer.email,
+
+#                 'user_being_reviewed': users.user_being_reviewed.email,
+
+
+#                 }     
+#             result_review_user.append(result_review_data)
+#         print('###')
+#         print(result_review_user)
+
+#         print('###')
+#         return render(request, 'profile.html',{ 'data' : data,  'result_review_user' : result_review_user , 'user_name':request.user.name
+#      },)
+    
+#     else:
+#          print('no review')
+    
+#     return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, 'avgrating': avg_rating})
+
+# @auth(by_pass_route=True)
+# def rating (request, reviewemail):
+#     user_being_reviewed = UserDetails.objects.get(email=reviewemail)
+#     rate = request.GET.get('rate', None)
+#     # print(rate, "rate")
+#     if(rate):
+#         review1=Review(
+#             rating=rate,
+#             reviewer=request.user,  # Set reviewer to the user giving the review
+#             user_being_reviewed=user_being_reviewed
+#         )
+#         review1.save()
+    
+
+#         avg_rating = Review.objects.filter(user_being_reviewed_id=reviewemail).aggregate(Avg('rating'))['rating__avg'] or 0.0
+#         print(avg_rating)
+#         user_being_reviewed .avgrating=avg_rating
+#         user_being_reviewed.save()
+#         return render (request, 'profile.html')
+#         # view_profile(reviewemail)
+
+
+
+#     #     data = {
+#     #     "email" : user_being_reviewed.email,
+#     #     "name":user_being_reviewed.name,
+#     #     "last_name":user_being_reviewed.last_name,
+#     #     'designation': user_being_reviewed.designation,
+#     #     'skills': user_being_reviewed.skills,
+#     #     'location': user_being_reviewed.location,
+#     #     'about':user_being_reviewed.about, 
+#     #     'avgrating':user_being_reviewed.avgrating
+#     #  }
+#     #     return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, })
+    
+#     else:
+#         messages.error(request, "No ratinng given by you.")
+#         return redirect("/profile")
+
 
 
 
@@ -274,5 +386,8 @@ def profile(request,reviewemail):
     return render(request, 'profile.html',{ 'data' : data, 'user_name' :request.user.name, 'avgrating': avg_rating})
 
 
+
+
+   
 
 
