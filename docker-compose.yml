@@ -1,0 +1,12 @@
+version: "25.0.3"
+
+
+services:
+  django:
+    image: django-docker:0.0.1
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver"
+    ports: 
+      - "8000:8000"
+
+
